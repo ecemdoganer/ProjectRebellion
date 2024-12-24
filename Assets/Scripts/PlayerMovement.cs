@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
         }
         set {
             _isMoving = value;
-            animator.SetBool("isWalking", value);
+            animator.SetBool(AnimationStrings.isWalking, value);
         }
     }
     
@@ -43,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
         }
         set {
             _isRunning = value;
-            animator.SetBool("isRunning", value);
+            animator.SetBool(AnimationStrings.isRunning, value);
         }
     }
 
@@ -62,7 +62,11 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (moveInput.x > 0.01f) {
+            transform.localScale = new Vector2((float)3.5961, (float)3.507428); 
+        } else if (moveInput.x < -0.01f) {
+            transform.localScale = new Vector2((float)-3.5961, (float)3.507428);
+        }
     }
 
     private void FixedUpdate()
@@ -73,10 +77,10 @@ public class PlayerMovement : MonoBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();
-        
         IsMoving = moveInput != Vector2.zero;
     }
 
+    
     public void OnRun(InputAction.CallbackContext context)
     {
         if (context.started)
