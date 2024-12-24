@@ -1,31 +1,90 @@
 using System;
 using UnityEngine;
-
+using UnityEngine.InputSystem;
+[RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float speed;
+    [SerializeField] private float walkSpeed;
+    [SerializeField] private float runSpeed;
     private Rigidbody2D body;
+    private Animator animator;
+    private Vector2 moveInput;
+    [SerializeField] private bool _isMoving = false;
+    [SerializeField] private bool _isRunning = false;
+
+    public float CurrentMoveSpeed {
+        get {
+            if (IsMoving) {
+                if (IsRunning) {
+                    return runSpeed;
+                } else {
+                    return walkSpeed;
+                }
+            } else {
+                // Idle speed is zero
+                return 0;
+            }
+        }
+    }
+
+    public bool IsMoving {
+        get {
+            return _isMoving;
+        }
+        set {
+            _isMoving = value;
+            animator.SetBool("isWalking", value);
+        }
+    }
+    
+    public bool IsRunning {
+        get {
+            return _isRunning;
+        }
+        set {
+            _isRunning = value;
+            animator.SetBool("isRunning", value);
+        }
+    }
 
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
-    private void Update()
+    // Start is called before the first frame update
+    void Start()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        body.velocity = new Vector2(horizontalInput * speed, body.velocity.y);
+        
+    }
 
-        // Flip player when moving left and right
-        if (horizontalInput > 0.01f) {
-            transform.localScale = new Vector3((float)-4.0961, (float)4.007428, (float)0.5); 
-        } else if (horizontalInput < -0.01f) {
-            transform.localScale = new Vector3((float)4.0961, (float)4.007428, (float)0.5);
-        }
+    // Update is called once per frame
+    void Update()
+    {
         
-        if (Input.GetKey(KeyCode.Space)) {
-            body.velocity = new Vector2(body.velocity.x, speed);
-        }
+    }
+
+    private void FixedUpdate()
+    {
+        body.velocity = new Vector2(moveInput.x * CurrentMoveSpeed, body.velocity.y);
+    }
+
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        moveInput = context.ReadValue<Vector2>();
         
+        IsMoving = moveInput != Vector2.zero;
+    }
+
+    public void OnRun(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            IsRunning = true;
+        } else if (context.canceled)
+        {
+            IsRunning = false;
+        }
     }
 }
