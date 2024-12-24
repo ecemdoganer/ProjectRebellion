@@ -63,9 +63,9 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         if (moveInput.x > 0.01f) {
-            transform.localScale = new Vector2((float)3.5961, (float)3.507428); 
+            transform.localScale = new Vector2((float)5.5961, (float)5.507428); 
         } else if (moveInput.x < -0.01f) {
-            transform.localScale = new Vector2((float)-3.5961, (float)3.507428);
+            transform.localScale = new Vector2((float)-5.5961, (float)5.507428);
         }
     }
 
