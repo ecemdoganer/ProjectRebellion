@@ -12,16 +12,32 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private bool _isMoving = false;
     [SerializeField] private bool _isRunning = false;
 
+    public bool CanMove
+    {
+        get
+        {
+            return  animator.GetBool(AnimationStrings.canMove);
+        }
+    }
+
     public float CurrentMoveSpeed {
         get {
-            if (IsMoving) {
-                if (IsRunning) {
-                    return runSpeed;
+            if (CanMove)
+            {
+                if (IsMoving) {
+                    if (IsRunning) {
+                        return runSpeed;
+                    } else {
+                        return walkSpeed;
+                    }
                 } else {
-                    return walkSpeed;
+                    // Idle speed is zero
+                    return 0;
                 }
-            } else {
-                // Idle speed is zero
+            }
+            else
+            {
+                // Movement locked
                 return 0;
             }
         }
@@ -89,6 +105,14 @@ public class PlayerMovement : MonoBehaviour
         } else if (context.canceled)
         {
             IsRunning = false;
+        }
+    }
+
+    public void OnAttack(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            animator.SetTrigger(AnimationStrings.attack);
         }
     }
 }
