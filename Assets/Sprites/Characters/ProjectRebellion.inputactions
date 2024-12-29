@@ -42,9 +42,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Jumping",
+                    "name": "Jump",
                     "type": "Button",
-                    "id": "d9700912-7cd5-4b8d-ba65-eda8ee4432fe",
+                    "id": "f3103ff8-06d2-4dfe-b8a9-3671e823727c",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -285,12 +285,12 @@
                 },
                 {
                     "name": "",
-                    "id": "55eda9f5-cd7f-4f5a-af4a-1ece8137e635",
+                    "id": "fc8cb7bc-bad0-40d7-9b83-898d58ff5f1f",
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Jumping",
+                    "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -9,11 +9,12 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D body;
     private Animator animator;
     private Vector2 moveInput;
-    public float jumpImpulse = 10f;
-    private TouchingDirections touchingDirections;
     [SerializeField] private bool _isMoving = false;
     [SerializeField] private bool _isRunning = false;
+    public float jumpImpulse = 10f;
+    private TouchingDirections touchingDirections;
 
+    
     public bool CanMove
     {
         get
@@ -26,7 +27,7 @@ public class PlayerMovement : MonoBehaviour
         get {
             if (CanMove)
             {
-                if (IsMoving && !touchingDirections._isOnWall) {
+                if (IsMoving) {
                     if (IsRunning) {
                         return runSpeed;
                     } else {
@@ -72,12 +73,6 @@ public class PlayerMovement : MonoBehaviour
         touchingDirections = GetComponent<TouchingDirections>();
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -119,14 +114,13 @@ public class PlayerMovement : MonoBehaviour
             animator.SetTrigger(AnimationStrings.attack);
         }
     }
-
+    
     public void OnJump(InputAction.CallbackContext context)
     {
         //chechk if its alive?
         if (context.started && touchingDirections.IsGrounded)
         {
             animator.SetTrigger(AnimationStrings.jump);
-            
             body.velocity = new Vector2(body.velocity.x, jumpImpulse);
         }
     }
