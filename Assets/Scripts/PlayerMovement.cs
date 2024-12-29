@@ -117,8 +117,8 @@ public class PlayerMovement : MonoBehaviour
     
     public void OnJump(InputAction.CallbackContext context)
     {
-        //chechk if its alive?
-        if (context.started && touchingDirections.IsGrounded)
+        // Check if it's alive?
+        if (context.started && touchingDirections.IsGrounded && CanMove)
         {
             animator.SetTrigger(AnimationStrings.jump);
             body.velocity = new Vector2(body.velocity.x, jumpImpulse);

@@ -13,7 +13,7 @@ public class DeathBringer : MonoBehaviour
     public float walkStopRate = 0.6f;
     private Rigidbody2D body;
     private WalkableDirection _walkDirection;
-    private Vector2 walkDirectionVector = Vector2.left;
+    private Vector2 walkDirectionVector = Vector2.right;
     TouchingDirections touchingDirections;
     Animator animator;
 
@@ -80,13 +80,15 @@ public class DeathBringer : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (CanMove == false)
+        if (touchingDirections.IsGrounded && touchingDirections.IsOnCeiling)
         {
-            body.velocity = new Vector2(0, body.velocity.y);
+            FlipDirection();
         }
-        else
-        {
-            body.velocity = new Vector2(walkSpeed * walkDirectionVector.x, body.velocity.y);
+
+        if (CanMove) {
+            body.velocity = new Vector2(walkSpeed * walkDirectionVector.x, body.velocity.y);   
+        } else {
+            body.velocity = new Vector2(Mathf.Lerp(body.velocity.x, 0, walkStopRate), body.velocity.y);
         }
     }
 

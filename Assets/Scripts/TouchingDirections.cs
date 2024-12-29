@@ -38,7 +38,7 @@ public class TouchingDirections : MonoBehaviour
     }
     
     private bool _isOnCeiling;
-    private Vector2 wallCheckDirection =>gameObject.transform.localScale.x > 0 ? Vector2.right : Vector2.left;
+    private Vector2 wallCheckDirection => gameObject.transform.localScale.x > 0 ? Vector2.right : Vector2.left;
     public bool IsOnCeiling{ 
         get {
             return _isOnCeiling;
