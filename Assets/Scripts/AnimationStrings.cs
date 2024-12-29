@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 internal class AnimationStrings
 {
+    public static string isOnCeiling = "isOnCeiling";
+    public static string isOnWall = "isOnWall";
     internal static string isWalking = "isWalking";
     internal static string isRunning = "isRunning";
     internal static string isGrounded = "isGrounded";

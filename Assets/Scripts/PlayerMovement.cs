@@ -27,7 +27,7 @@ public class PlayerMovement : MonoBehaviour
         get {
             if (CanMove)
             {
-                if (IsMoving) {
+                if (IsMoving && !touchingDirections.IsOnWall) {
                     if (IsRunning) {
                         return runSpeed;
                     } else {
