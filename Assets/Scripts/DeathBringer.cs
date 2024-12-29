@@ -8,12 +8,14 @@ using Vector2 = UnityEngine.Vector2;
 
 public class DeathBringer : MonoBehaviour
 {
-    [SerializeField] public float walkSpeed;
-    [SerializeField] public float runSpeed;
+    public DetectionZone attackZone;
+    public float walkSpeed;
+    public float walkStopRate = 0.6f;
     private Rigidbody2D body;
     private WalkableDirection _walkDirection;
-    private Vector2 walkDirectionVector;
+    private Vector2 walkDirectionVector = Vector2.left;
     TouchingDirections touchingDirections;
+    Animator animator;
 
     public WalkableDirection WalkDirection
     {
@@ -38,6 +40,7 @@ public class DeathBringer : MonoBehaviour
             _walkDirection = value; 
         }
     }
+    
     public enum WalkableDirection 
     {
         Left, Right
@@ -47,16 +50,44 @@ public class DeathBringer : MonoBehaviour
     {
         body = GetComponent<Rigidbody2D>();
         touchingDirections = GetComponent<TouchingDirections>();
+        animator = GetComponent<Animator>();
+    }
+
+    public bool _hasTarget = false;
+
+    public bool HasTarget {
+        get {
+            return _hasTarget;
+        } private set {
+            _hasTarget = value;
+            animator.SetBool(AnimationStrings.hasTarget, value);
+        }
+    }
+
+    public bool CanMove
+    {
+        get
+        {
+            return animator.GetBool(AnimationStrings.canMove);
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        HasTarget = attackZone.detectedColliders.Count > 0;
     }
 
     private void FixedUpdate()
     {
-        if (touchingDirections.IsGrounded)
+        if (CanMove == false)
         {
-            FlipDirection();
+            body.velocity = new Vector2(0, body.velocity.y);
         }
-        
-        body.velocity = new Vector2(walkSpeed * walkDirectionVector.x, body.velocity.y);
+        else
+        {
+            body.velocity = new Vector2(walkSpeed * walkDirectionVector.x, body.velocity.y);
+        }
     }
 
     private void FlipDirection()
@@ -70,17 +101,5 @@ public class DeathBringer : MonoBehaviour
         } else {
             Debug.LogError("Current walkable direction is not set to legal values of right or left");
         }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
