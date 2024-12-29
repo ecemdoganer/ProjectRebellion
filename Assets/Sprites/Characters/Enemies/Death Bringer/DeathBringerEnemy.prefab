@@ -32,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 11.44, y: -3.59, z: 0}
-  m_LocalScale: {x: 6.473903, y: 6.473903, z: 6.473903}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8291283377393920819}
@@ -149,8 +149,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0067564724, y: -0.001354852}
-  m_Size: {x: 0.32429433, y: 0.5490485}
+  m_Offset: {x: -0.04882002, y: -0.0027438402}
+  m_Size: {x: 1.7754946, y: 3.0966837}
   m_Direction: 0
 --- !u!114 &9123081700448355505
 MonoBehaviour:
@@ -165,7 +165,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackZone: {fileID: 7433500416619045440}
-  walkSpeed: 1.5
+  walkSpeed: 1
+  walkStopRate: 0.05
   _hasTarget: 0
 --- !u!95 &649937909774700630
 Animator:
@@ -201,7 +202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   castFilter:
-    useTriggers: 0
+    useTriggers: 1
     useLayerMask: 1
     useDepth: 0
     useOutsideDepth: 0
