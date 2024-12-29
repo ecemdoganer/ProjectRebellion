@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody2D), typeof(TouchingDirections))]
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float walkSpeed;
@@ -9,6 +9,8 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D body;
     private Animator animator;
     private Vector2 moveInput;
+    public float jumpImpulse = 10f;
+    private TouchingDirections touchingDirections;
     [SerializeField] private bool _isMoving = false;
     [SerializeField] private bool _isRunning = false;
 
@@ -24,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
         get {
             if (CanMove)
             {
-                if (IsMoving) {
+                if (IsMoving && !touchingDirections._isOnWall) {
                     if (IsRunning) {
                         return runSpeed;
                     } else {
@@ -67,6 +69,7 @@ public class PlayerMovement : MonoBehaviour
     {
         body = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        touchingDirections = GetComponent<TouchingDirections>();
     }
 
     // Start is called before the first frame update
@@ -88,6 +91,7 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         body.velocity = new Vector2(moveInput.x * CurrentMoveSpeed, body.velocity.y);
+        animator.SetFloat(AnimationStrings.yVelocity, body.velocity.y);
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -113,6 +117,17 @@ public class PlayerMovement : MonoBehaviour
         if (context.started)
         {
             animator.SetTrigger(AnimationStrings.attack);
+        }
+    }
+
+    public void OnJump(InputAction.CallbackContext context)
+    {
+        //chechk if its alive?
+        if (context.started && touchingDirections.IsGrounded)
+        {
+            animator.SetTrigger(AnimationStrings.jump);
+            
+            body.velocity = new Vector2(body.velocity.x, jumpImpulse);
         }
     }
 }
