@@ -13,6 +13,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private bool _isRunning = false;
     public float jumpImpulse = 10f;
     private TouchingDirections touchingDirections;
+    
+    [SerializeField] private float coyoteTime = 0.2f; // Duration of coyote time
+    [SerializeField] private float jumpBufferTime = 0.2f; // Duration of jump buffering
+
+    private float coyoteTimeCounter; // Tracks remaining coyote time
+    private float jumpBufferCounter; // Tracks remaining jump buffer time
+
 
     
     public bool CanMove
@@ -85,6 +92,24 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+
+        if (touchingDirections.IsGrounded)
+        {
+            coyoteTimeCounter = coyoteTime;
+        }
+
+        else
+        {
+            coyoteTimeCounter -= Time.fixedDeltaTime;
+        }
+
+        if (jumpBufferCounter > 0)
+        {
+            jumpBufferCounter -= Time.fixedDeltaTime;
+
+            AttemptJump();
+        }
+
         body.velocity = new Vector2(moveInput.x * CurrentMoveSpeed, body.velocity.y);
         animator.SetFloat(AnimationStrings.yVelocity, body.velocity.y);
     }
@@ -118,10 +143,32 @@ public class PlayerMovement : MonoBehaviour
     public void OnJump(InputAction.CallbackContext context)
     {
         // Check if it's alive?
-        if (context.started && touchingDirections.IsGrounded && CanMove)
+        if (context.started )
+        {
+            jumpBufferCounter = jumpBufferTime;
+
+            if (touchingDirections.IsGrounded && CanMove)
+            {
+                animator.SetTrigger(AnimationStrings.jump);
+                body.velocity = new Vector2(body.velocity.x, jumpImpulse);
+
+                jumpBufferCounter = 0;
+                coyoteTimeCounter = 0;
+            }
+
+            
+        }
+    }
+
+    private void AttemptJump()
+    {
+        if (coyoteTimeCounter > 0 || touchingDirections.IsGrounded && CanMove)
         {
             animator.SetTrigger(AnimationStrings.jump);
             body.velocity = new Vector2(body.velocity.x, jumpImpulse);
+            
+            jumpBufferCounter = 0;
+            coyoteTimeCounter = 0;
         }
     }
 }
