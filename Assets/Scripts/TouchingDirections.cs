@@ -57,6 +57,8 @@ public class TouchingDirections : MonoBehaviour
     void FixedUpdate()
     {
         IsGrounded = touchingCollider.Cast(Vector2.down, castFilter, groundHits, groundDistance) > 0;
+        animator.SetBool(AnimationStrings.isGrounded, IsGrounded);
+        
         IsOnWall = touchingCollider.Cast(wallCheckDirection, castFilter, wallHits, wallDistance) >0;
         IsOnCeiling = touchingCollider.Cast(Vector2.up, castFilter, ceilingHits, ceilingDistance) > 0;
     }
