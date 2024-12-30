@@ -12,6 +12,6 @@ public class ProjectileLauncher : MonoBehaviour
         GameObject projectile = Instantiate(projectilePrefab, launchPoint.position, projectilePrefab.transform.rotation);
         Vector3 origScale = projectile.transform.localScale;
         
-        projectile.transform.localScale = new Vector3(origScale.x, origScale.y, origScale.z);
+        projectile.transform.localScale = new Vector3(origScale.x * transform.localScale.x > 0 ? 4 : -4 , origScale.y, origScale.z);
     }
 }

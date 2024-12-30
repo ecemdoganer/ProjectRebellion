@@ -90,6 +90,10 @@ public class Damageable : MonoBehaviour
     {
         get
         {
+            if (animator.GetBool(AnimationStrings.isHit) && animator.GetBool(AnimationStrings.isAlive))
+            {
+                animator.SetBool(AnimationStrings.isHit, false);
+            }
             return animator.GetBool(AnimationStrings.isHit);
         }
         private set
