@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-[RequireComponent(typeof(Rigidbody2D), typeof(TouchingDirections))]
+[RequireComponent(typeof(Rigidbody2D), typeof(TouchingDirections), typeof(Damageable))]
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float walkSpeed;
@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private bool _isRunning = false;
     public float jumpImpulse = 10f;
     private TouchingDirections touchingDirections;
+    Damageable damageable;
     
     [SerializeField] private float coyoteTime = 0.2f; // Duration of coyote time
     [SerializeField] private float jumpBufferTime = 0.2f; // Duration of jump buffering
@@ -27,6 +28,14 @@ public class PlayerMovement : MonoBehaviour
         get
         {
             return  animator.GetBool(AnimationStrings.canMove);
+        }
+    }
+
+    public bool IsAlive
+    {
+        get
+        {
+            return animator.GetBool(AnimationStrings.isAlive);
         }
     }
 
@@ -78,6 +87,7 @@ public class PlayerMovement : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         touchingDirections = GetComponent<TouchingDirections>();
+        damageable = GetComponent<Damageable>();
     }
 
     // Update is called once per frame
@@ -110,7 +120,10 @@ public class PlayerMovement : MonoBehaviour
             AttemptJump();
         }
 
-        body.velocity = new Vector2(moveInput.x * CurrentMoveSpeed, body.velocity.y);
+        if (!damageable.IsHit)
+        {
+            body.velocity = new Vector2(moveInput.x * CurrentMoveSpeed, body.velocity.y);
+        }
         animator.SetFloat(AnimationStrings.yVelocity, body.velocity.y);
     }
 
@@ -170,5 +183,10 @@ public class PlayerMovement : MonoBehaviour
             jumpBufferCounter = 0;
             coyoteTimeCounter = 0;
         }
+    }
+
+    public void OnHit(int damage, Vector2 knockback)
+    {
+        body.velocity = new Vector2(knockback.x, body.velocity.y + knockback.y);
     }
 }
